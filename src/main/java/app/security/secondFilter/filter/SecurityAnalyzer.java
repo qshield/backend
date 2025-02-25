@@ -1,4 +1,4 @@
-package studio.aroundhub.qshield.filter;
+package app.security.secondFilter.filter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,7 +10,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static studio.aroundhub.qshield.filter.VerificationMethod.*;
+import static app.security.secondFilter.method.VerificationMethod.*;
+
 
 @Slf4j
 public class SecurityAnalyzer {
@@ -65,11 +66,8 @@ public class SecurityAnalyzer {
                 return true; // 오류 응답 발생 시 위조 가능성 높음
             }
 
-            //  Header 검증 ->헤더는 위조 가능성도 있고 사이트 별로 제공하는
-            //  헤더 값이 다르기도 하고 보안을 위해서 특정 헤더 값을 숨기는 경우가 있기 때문에
-            // header 값만으로는 검증이 불가능하다.
+
             boolean isHeaderSuspicious = isSuspiciousHeaders(headers);
-            // 3xx code일 경우 redirection url도 검사
             if (responseCode >= 300 && responseCode < 400) {
                 String redirectedUrl = connection.getHeaderField("Location");
 
@@ -88,7 +86,7 @@ public class SecurityAnalyzer {
             //헤더 값도 문제이고 403 응답 코드를 보낸다면 주의가 필요한 사이트로 판별한다.
             if (isHeaderSuspicious &&responseCode == 403)
             {
-                log.warn(" Header value abnormal: {}", urlString);
+                log.debug(" Header value abnormal: {}", urlString);
                 return true;
             }
 

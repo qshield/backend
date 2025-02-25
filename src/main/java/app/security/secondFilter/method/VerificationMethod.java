@@ -1,5 +1,6 @@
-package studio.aroundhub.qshield.filter;
+package app.security.secondFilter.method;
 
+import app.security.secondFilter.filter.SecurityAnalyzer;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -7,7 +8,8 @@ import java.io.IOException;
 import java.net.*;
 import java.util.*;
 
-import static studio.aroundhub.qshield.filter.Header.WHITELIST;
+import static app.security.secondFilter.headerList.Header.WHITELIST;
+
 
 @Slf4j
 public class VerificationMethod {

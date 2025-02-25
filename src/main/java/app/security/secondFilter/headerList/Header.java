@@ -1,4 +1,4 @@
-package studio.aroundhub.qshield.filter;
+package app.security.secondFilter.headerList;
 
 import java.util.Map;
 import java.util.Set;
@@ -6,7 +6,7 @@ import java.util.Set;
 public class Header {
 
 //헤더 검증을 위한 whitelist
-    static final Map<String, Set<String>> WHITELIST = Map.ofEntries(
+    static public final Map<String, Set<String>> WHITELIST = Map.ofEntries(
         Map.entry("Server", Set.of("nginx", "Apache", "Cloudflare", "Microsoft-IIS/10.0", "GitHub.com", "AkamaiGHost", "AppleWebKit", "KakaoBot")),
         Map.entry("X-Powered-By", Set.of("PHP/7.4", ".NET", "Express", "Servlet/3.1", "Node.js", "ASP.NET")),
 
