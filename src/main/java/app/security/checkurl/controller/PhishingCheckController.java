@@ -27,12 +27,7 @@ public class PhishingCheckController {
             return ResponseEntity.badRequest().body("URL을 입력해주세요.");
         }
 
-        boolean isPhishing = phishingCheckService.isPhishingUrl(url);
-
-        if (isPhishing) {
-            return ResponseEntity.ok("🚨 피싱 사이트입니다! 🚨");
-        } else {
-            return ResponseEntity.ok("✅ 안전한 사이트입니다.");
-        }
+        String isPhishing = phishingCheckService.isPhishingUrl(url);
+        return ResponseEntity.ok(isPhishing);
     }
 }
