@@ -21,13 +21,13 @@ public class PhishingCheckController {
     }
 
     @PostMapping("/check-url")
-    public ResponseEntity<String> checkUrl(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Integer> checkUrl(@RequestBody Map<String, String> request) {
         String url = request.get("url");
         if (url == null || url.isEmpty()) {
-            return ResponseEntity.badRequest().body("URL을 입력해주세요.");
+            return ResponseEntity.badRequest().body(3);
         }
 
-        String isPhishing = phishingCheckService.isPhishingUrl(url);
+        int isPhishing = phishingCheckService.isPhishingUrl(url);
         return ResponseEntity.ok(isPhishing);
     }
 }

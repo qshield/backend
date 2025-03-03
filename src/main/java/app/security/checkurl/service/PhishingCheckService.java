@@ -23,7 +23,7 @@ public class PhishingCheckService {
         this.restTemplate = new RestTemplate();
     }
 
-    public String isPhishingUrl(String url) {
+    public int isPhishingUrl(String url) {
         String apiUrl = GOOGLE_SAFE_BROWSING_URL + apiKey;
 
         // Google API 요청 형식에 맞춘 JSON 데이터
@@ -46,11 +46,11 @@ public class PhishingCheckService {
         boolean isApkDownloadBlocked = SecurityAnalyzer.blockApkDownload(url);
 
         if (isPhishingByGoogle || isPhishingBySecondFilter) {
-            return "🚨 피싱 사이트입니다! 🚨";
+            return 0;
         } else if (isApkDownloadBlocked) {
-            return "⚠️ APK 파일 다운로드가 차단되었습니다.";
+            return 1;
         } else {
-            return "✅ 안전한 사이트입니다.";
+            return 2;
         }
     }
 }
