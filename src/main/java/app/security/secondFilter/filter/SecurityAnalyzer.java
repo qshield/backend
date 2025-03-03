@@ -154,5 +154,17 @@ public class SecurityAnalyzer {
 
     }
 
+    public static boolean blockApkDownload(String url) {
+        String lowerUrl = url.toLowerCase();
+
+        // APK 파일 다운로드 패턴 검사
+        return lowerUrl.endsWith(".apk") ||  // .apk로 끝나는 URL 차단
+                lowerUrl.contains("/download/") && lowerUrl.contains(".apk") ||  // /download/ 디렉토리 안 APK 차단
+                lowerUrl.matches(".*(\\?|&)file=.*\\.apk.*") ||  // file=example.apk 형태의 다운로드 차단
+                lowerUrl.matches(".*(\\?|&)attachment=.*\\.apk.*") ||  // attachment=example.apk 형태의 다운로드 차단
+                lowerUrl.matches(".*(\\?|&)filename=.*\\.apk.*") ||  // filename=example.apk 형태의 다운로드 차단
+                lowerUrl.matches(".*(\\?|&)type=application/vnd.android.package-archive.*"); // APK MIME 타입 다운로드 차단
+    }
+
 }
 

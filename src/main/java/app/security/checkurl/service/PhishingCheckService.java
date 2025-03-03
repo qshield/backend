@@ -1,5 +1,6 @@
 package app.security.checkurl.service;
 
+import app.security.secondFilter.filter.SecurityAnalyzer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class PhishingCheckService {
         this.restTemplate = new RestTemplate();
     }
 
-    public boolean isPhishingUrl(String url) {
+    public String isPhishingUrl(String url) {
         String apiUrl = GOOGLE_SAFE_BROWSING_URL + apiKey;
 
         // Google API 요청 형식에 맞춘 JSON 데이터
@@ -34,7 +35,22 @@ public class PhishingCheckService {
         HttpEntity<String> request = new HttpEntity<>(requestJson, headers);
         ResponseEntity<Map> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, Map.class);
 
-        // API 응답이 비어 있으면 안전한 URL, 비어 있지 않으면 피싱 사이트
-        return response.getBody() != null && !response.getBody().isEmpty();
+
+        // 1차 필터: Google Safe Browsing 결과 검사
+        boolean isPhishingByGoogle = response.getBody() != null && !response.getBody().isEmpty();
+
+        // 2차 필터: SecurityAnalyzer 검사
+        boolean isPhishingBySecondFilter = SecurityAnalyzer.secondFilter(url);
+
+        // 3차 필터: APK 다운로드 차단 검사
+        boolean isApkDownloadBlocked = SecurityAnalyzer.blockApkDownload(url);
+
+        if (isPhishingByGoogle || isPhishingBySecondFilter) {
+            return "🚨 피싱 사이트입니다! 🚨";
+        } else if (isApkDownloadBlocked) {
+            return "⚠️ APK 파일 다운로드가 차단되었습니다.";
+        } else {
+            return "✅ 안전한 사이트입니다.";
+        }
     }
 }
